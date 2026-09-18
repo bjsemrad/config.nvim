@@ -24,6 +24,13 @@ return {
     picker = {
       enabled = true,
       layout = { preset = 'default' },
+      sources = {
+        explorer = {
+          -- Close the explorer once you pick a file, instead of leaving the
+          -- sidebar open alongside it. Snacks defaults this to `false`.
+          jump = { close = true },
+        },
+      },
     },
     explorer = { enabled = true },
     styles = {
