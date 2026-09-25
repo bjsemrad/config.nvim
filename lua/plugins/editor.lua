@@ -71,7 +71,7 @@ return {
 
   -- Collection of small, independent editing plugins
   {
-    'echasnovski/mini.nvim',
+    'nvim-mini/mini.nvim',
     version = '*',
     event = 'VeryLazy',
     config = function()
