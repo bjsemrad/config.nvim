@@ -39,8 +39,15 @@ return {
       -- reasonable debug configurations.
       automatic_installation = true,
       handlers = {},
+      -- `handlers = {}` above is truthy, so mason-nvim-dap runs its default
+      -- handler for each of these and registers the adapter with nvim-dap.
       ensure_installed = {
-        'delve',
+        'delve', -- Go
+        'codelldb', -- Rust / C / C++ / Zig
+        'cppdbg', -- C / C++ (the cpptools package)
+        'python', -- debugpy
+        'js', -- js-debug-adapter, for Node and TypeScript
+        'kotlin', -- kotlin-debug-adapter
       },
     }
 

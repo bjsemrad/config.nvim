@@ -26,8 +26,8 @@ return {
     name = 'rose-pine',
     lazy = true,
     opts = {
-      variant = 'auto', -- auto, main, moon, or dawn
-      dark_variant = 'main',
+      variant = 'moon', -- auto, main, moon, or dawn
+      dark_variant = 'moon',
       dim_inactive_windows = false,
       extend_background_behind_borders = true,
 

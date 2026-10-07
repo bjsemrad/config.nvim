@@ -58,9 +58,9 @@ return {
 
           -- Toggle inlay hints, where the server provides them.
           if supports(vim.lsp.protocol.Methods.textDocument_inlayHint) then
-            map('<leader>th', function()
+            map('<leader>uh', function()
               vim.lsp.inlay_hint.enable(not vim.lsp.inlay_hint.is_enabled { bufnr = event.buf })
-            end, '[T]oggle Inlay [H]ints')
+            end, 'Toggle Inlay [H]ints')
           end
         end,
       })
@@ -87,6 +87,16 @@ return {
           },
         },
         gopls = {},
+        bashls = {},
+        basedpyright = {
+          settings = {
+            basedpyright = {
+              -- 'standard' is far less noisy than basedpyright's default 'all'.
+              analysis = { typeCheckingMode = 'standard' },
+            },
+          },
+        },
+        vtsls = {}, -- TypeScript / JavaScript
         cmake = {},
         cssls = {},
         docker_compose_language_service = {},
@@ -115,16 +125,23 @@ return {
         end
       end
 
-      -- Tools for Mason to install, on top of the servers above.
-      local ensure_installed = vim.tbl_keys(servers)
-      vim.list_extend(ensure_installed, {
-        'stylua', -- Lua formatter
-        'cpptools', -- DAP adapter for C/C++
-        'codelldb', -- DAP adapter for Rust/C/C++
-      })
-      require('mason-tool-installer').setup { ensure_installed = ensure_installed }
+      -- Standalone tools, by Mason *package* name.
+      --
+      -- NOTE: servers are NOT listed here. mason-tool-installer wants package
+      -- names ("lua-language-server"), whereas these are lspconfig names
+      -- ("lua_ls"). It only resolves the latter once mason-lspconfig has
+      -- registered its aliases, which is a race — servers that happen to share
+      -- both names installed, `bashls` never did. Servers go through
+      -- mason-lspconfig's own `ensure_installed`, which does the mapping.
+      require('mason-tool-installer').setup {
+        ensure_installed = {
+          'stylua', -- Lua formatter
+        },
+      }
 
       require('mason-lspconfig').setup {
+        -- Takes lspconfig names and maps them to Mason packages itself.
+        ensure_installed = vim.tbl_keys(servers),
         -- Installed servers are enabled automatically via `vim.lsp.enable()`.
         automatic_enable = {
           exclude = {

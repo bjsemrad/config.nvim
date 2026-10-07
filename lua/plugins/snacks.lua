@@ -64,6 +64,10 @@ return {
     -- [[ Explorer ]] replaces the neo-tree `\` binding.
     { '\\', function() Snacks.explorer() end, desc = 'File Explorer' },
 
+    -- [[ Terminal ]]
+    { '<C-\\>', function() Snacks.terminal.toggle() end, desc = 'Toggle terminal', mode = { 'n', 't' } },
+    { '<leader>gt', function() Snacks.terminal() end, desc = '[G]it/shell: [T]erminal' },
+
     -- [[ Misc ]]
     { '<leader>gg', function() Snacks.lazygit() end, desc = '[G]it: Lazy[g]it' },
     { '<leader>un', function() Snacks.notifier.hide() end, desc = 'Dismiss [N]otifications' },
