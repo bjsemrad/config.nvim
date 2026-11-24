@@ -9,7 +9,15 @@ return {
     priority = 1000, -- load before everything else
     opts = {
       -- Main options --
-      style = 'darker',
+      style = 'soft',
+      colors = {
+        black = '#08090b',
+        bg_d = '#0e1013', -- sidebars, floats, statusline
+        bg0 = '#121418', -- main editor background
+        bg1 = '#1a1d22', -- cursorline, popups
+        bg2 = '#22252b', -- selection, pmenu
+        bg3 = '#262a31', -- borders, inactive bits
+      },
     },
     config = function(_, opts)
       require('onedark').setup(opts)
@@ -18,9 +26,25 @@ return {
   },
 
   { 'bjsemrad/matteblack.nvim', lazy = true },
-
+  { 'vague-theme/vague.nvim', lazy = true },
+  { 'bjsemrad/pastel.nvim', lazy = true },
   { 'folke/tokyonight.nvim', lazy = true },
-
+  {
+    'webhooked/kanso.nvim',
+    opts = {
+      foreground = { dark = 'saturated', light = 'default' }, -- the "pop"
+      overrides = function(colors)
+        local member = { fg = '#C4A68A' } -- warm sand, from kanso's yellow3/orange family
+        return {
+          ['@variable.member'] = member,
+          ['@property'] = member,
+          ['@lsp.type.property'] = member,
+          ['@keyword'] = { fg = colors.theme.syn.keyword, bold = true },
+        }
+      end,
+    },
+    lazy = true,
+  },
   {
     'rose-pine/neovim',
     name = 'rose-pine',
