@@ -10,41 +10,71 @@ return {
     opts = {
       -- Main options --
       style = 'soft',
-      colors = {
-        black = '#08090b',
-        bg_d = '#0e1013', -- sidebars, floats, statusline
-        bg0 = '#121418', -- main editor background
-        bg1 = '#1a1d22', -- cursorline, popups
-        bg2 = '#22252b', -- selection, pmenu
-        bg3 = '#262a31', -- borders, inactive bits
-      },
     },
     config = function(_, opts)
       require('onedark').setup(opts)
-      vim.cmd.colorscheme 'onedark'
+      --vim.cmd.colorscheme 'onedark'
+    end,
+  },
+ {
+    'bjsemrad/kanso.nvim',
+    lazy = false,
+    priority = 1000,
+    opts = {
+      foreground = { dark = 'saturated', light = 'default' },
+      overrides = function(colors)
+        local s = colors.theme.syn
+        local BOOST = 0.08 -- 0 = stock kanso, 0.12 ≈ soft's level, 0.20 = One Dark darker-ish
+
+        local function lift(hex)
+          local r = tonumber(hex:sub(2, 3), 16)
+          local g = tonumber(hex:sub(4, 5), 16)
+          local b = tonumber(hex:sub(6, 7), 16)
+          local f = function(x)
+            return math.floor(x + (255 - x) * BOOST + 0.5)
+          end
+          return string.format('#%02x%02x%02x', f(r), f(g), f(b))
+        end
+
+        local hl = {}
+        local function paint(groups, spec)
+          for _, g in ipairs(groups) do
+            hl[g] = spec
+          end
+        end
+
+        -- keywords: kanso violet, lifted, bold so they stand apart
+        paint({
+          '@keyword',
+          '@keyword.function',
+          '@keyword.return',
+          '@keyword.conditional',
+          '@keyword.repeat',
+          '@keyword.import',
+          '@keyword.operator',
+          '@keyword.exception',
+        }, { fg = lift(s.keyword), bold = true })
+
+        -- functions, types, strings, numbers, constants: lifted versions of kanso's own colors
+        paint({ '@function', '@function.call', '@function.method', '@function.method.call' }, { fg = lift(s.fun) })
+        paint({ '@type', '@type.builtin', '@type.definition' }, { fg = lift(s.type) })
+        paint({ '@string', '@string.escape' }, { fg = lift(s.string) })
+        paint({ '@number', '@number.float' }, { fg = lift(s.number) })
+        paint({ '@constant', '@constant.builtin', '@boolean' }, { fg = lift(s.constant) })
+
+        -- members: warm sand so they no longer share the keyword color
+        paint({ '@variable.member', '@property', '@lsp.type.property' }, { fg = lift '#c4a68a' })
+
+        return hl
+      end,
+    },
+    config = function(_, opts)
+      require('kanso').setup(opts)
+      vim.cmd.colorscheme 'kanso-zen'
     end,
   },
 
   { 'bjsemrad/matteblack.nvim', lazy = true },
-  { 'vague-theme/vague.nvim', lazy = true },
-  { 'bjsemrad/pastel.nvim', lazy = true },
-  { 'folke/tokyonight.nvim', lazy = true },
-  {
-    'webhooked/kanso.nvim',
-    opts = {
-      foreground = { dark = 'saturated', light = 'default' }, -- the "pop"
-      overrides = function(colors)
-        local member = { fg = '#C4A68A' } -- warm sand, from kanso's yellow3/orange family
-        return {
-          ['@variable.member'] = member,
-          ['@property'] = member,
-          ['@lsp.type.property'] = member,
-          ['@keyword'] = { fg = colors.theme.syn.keyword, bold = true },
-        }
-      end,
-    },
-    lazy = true,
-  },
   {
     'rose-pine/neovim',
     name = 'rose-pine',
