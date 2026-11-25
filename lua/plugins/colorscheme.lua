@@ -16,7 +16,7 @@ return {
       --vim.cmd.colorscheme 'onedark'
     end,
   },
- {
+  {
     'bjsemrad/kanso.nvim',
     lazy = false,
     priority = 1000,
@@ -53,7 +53,7 @@ return {
           '@keyword.import',
           '@keyword.operator',
           '@keyword.exception',
-        }, { fg = lift(s.keyword), bold = true })
+        }, { fg = lift(s.keyword), bold = false })
 
         -- functions, types, strings, numbers, constants: lifted versions of kanso's own colors
         paint({ '@function', '@function.call', '@function.method', '@function.method.call' }, { fg = lift(s.fun) })
