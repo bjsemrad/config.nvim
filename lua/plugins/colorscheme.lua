@@ -9,7 +9,7 @@ return {
     priority = 1000, -- load before everything else
     opts = {
       -- Main options --
-      style = 'soft',
+      style = 'darker',
     },
     config = function(_, opts)
       require('onedark').setup(opts)
@@ -70,7 +70,7 @@ return {
     },
     config = function(_, opts)
       require('kanso').setup(opts)
-      vim.cmd.colorscheme 'kanso-zen'
+      vim.cmd.colorscheme 'kanso-ink'
     end,
   },
 
